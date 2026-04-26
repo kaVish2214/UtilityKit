@@ -29,27 +29,27 @@ public final class DelegateSubscriptionHandle: DelegateSubscription, @unchecked 
 
     // MARK: - DelegateSubscription
 
-    public var subscribers: [any DelegateSubscriber] {
+    public var subscribers: [any MultiCastDelegate] {
         lock.lock()
         defer { lock.unlock() }
-        return delegateStorage.allObjects.compactMap { $0 as? (any DelegateSubscriber) }
+        return delegateStorage.allObjects.compactMap { $0 as? (any MultiCastDelegate) }
     }
 
-    public func subscribe(_ subscriber: any DelegateSubscriber, receive queue: DispatchQueue) {
+    public func subscribe(_ subscriber: any MultiCastDelegate, receive queue: DispatchQueue) {
         lock.lock()
         defer { lock.unlock() }
         delegateStorage.add(subscriber)
         queueStorage.setObject(queue, forKey: subscriber)
     }
 
-    public func unsubscribe(_ subscriber: any DelegateSubscriber) {
+    public func unsubscribe(_ subscriber: any MultiCastDelegate) {
         lock.lock()
         defer { lock.unlock() }
         delegateStorage.remove(subscriber)
         queueStorage.removeObject(forKey: subscriber)
     }
 
-    public func queue(for subscriber: any DelegateSubscriber) -> DispatchQueue {
+    public func queue(for subscriber: any MultiCastDelegate) -> DispatchQueue {
         lock.lock()
         defer { lock.unlock() }
         return queueStorage.object(forKey: subscriber) ?? .main

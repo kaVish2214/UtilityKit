@@ -14,20 +14,20 @@ import Foundation
 public protocol DelegateSubscription: Sendable {
 
     /// All currently registered subscribers.
-    var subscribers: [any DelegateSubscriber] { get }
+    var subscribers: [any MultiCastDelegate] { get }
 
     /// Registers a subscriber to receive delegate callbacks on the specified queue.
     /// - Parameters:
     ///   - subscriber: The delegate to register.
     ///   - queue: The dispatch queue on which the subscriber will receive callbacks.
-    func subscribe(_ subscriber: any DelegateSubscriber, receive queue: DispatchQueue)
+    func subscribe(_ subscriber: any MultiCastDelegate, receive queue: DispatchQueue)
 
     /// Removes a previously registered subscriber. No-op if the subscriber is not registered.
     /// - Parameter subscriber: The delegate to remove.
-    func unsubscribe(_ subscriber: any DelegateSubscriber)
+    func unsubscribe(_ subscriber: any MultiCastDelegate)
 
     /// Returns the dispatch queue associated with the given subscriber.
     /// - Parameter subscriber: The delegate whose queue is requested.
     /// - Returns: The queue the subscriber was registered with, or `.main` if not found.
-    func queue(for subscriber: any DelegateSubscriber) -> DispatchQueue
+    func queue(for subscriber: any MultiCastDelegate) -> DispatchQueue
 }

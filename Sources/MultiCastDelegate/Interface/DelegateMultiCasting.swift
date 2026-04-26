@@ -32,7 +32,7 @@ import Foundation
 /// ```
 public protocol DelegateMultiCasting: Sendable {
 
-    associatedtype Delegate: DelegateSubscriber
+    associatedtype Delegate: Sendable
 
     /// The subscription managing registered delegates and their dispatch queues.
     var delegates: any DelegateSubscription { get }
@@ -44,14 +44,18 @@ public protocol DelegateMultiCasting: Sendable {
     /// and may have been deallocated.
     /// - Parameter invocation: A closure called once per subscriber.
     func invoke(invocation: @escaping @Sendable (Delegate?) -> ())
+    
+//    func subscribeDelegate(_ delegate: Delegate, receive queue: DispatchQueue)
+//    
+//    func unsubscribeDelegate(_ delegate: Delegate)
 }
 
-extension DelegateMultiCasting {
+extension DelegateMultiCasting where Delegate == any MultiCastDelegate {
 
     public func invoke(invocation: @escaping @Sendable (Delegate?) -> ()) {
         for delegate in delegates.subscribers.reversed() {
             delegates.queue(for: delegate).async { [weak delegate] in
-                invocation(delegate as? Delegate)
+                invocation(delegate)
             }
         }
     }
