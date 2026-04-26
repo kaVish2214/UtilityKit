@@ -7,16 +7,20 @@ let package = Package(
     name: "UtilityKit",
     platforms: [
         .iOS(.v14),
-        .macOS(.v10_13)
+        .macOS(.v10_15)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "UtilityKit",
             targets: [
-                "MultiCastDelegate"
+                "MultiCastDelegate",
+                "DependencyResolver"
             ]
         ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/hmlongco/Factory", .upToNextMajor(from: .init(stringLiteral: "2.4.3"))),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -25,10 +29,18 @@ let package = Package(
             name: "MultiCastDelegate",
             path: "Sources/MultiCastDelegate"
         ),
+        .target(
+            name: "DependencyResolver",
+            dependencies: [
+                .product(name: "Factory", package: "Factory")
+            ],
+            path: "Sources/DependencyResolver"
+        ),
         .testTarget(
             name: "UtilityKitTests",
             dependencies: [
-                "MultiCastDelegate"
+                "MultiCastDelegate",
+                "DependencyResolver"
             ]
         ),
     ],
