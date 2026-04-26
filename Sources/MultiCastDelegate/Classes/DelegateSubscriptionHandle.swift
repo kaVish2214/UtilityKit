@@ -7,14 +7,29 @@
 
 import Foundation
 
-/// A thread-safe, concrete implementation of ``DelegateSubscription`` that stores subscribers
-/// as weak references.
+/// A thread-safe, concrete implementation of ``DelegateSubscription`` that stores
+/// subscribers as **weak references**.
 ///
-/// Uses `NSHashTable.weakObjects()` so subscribers are automatically removed when deallocated,
-/// and `NSMapTable` to associate each subscriber with its callback dispatch queue.
+/// ### Storage
+/// - `NSHashTable.weakObjects()` — subscribers are automatically zeroed out when
+///   deallocated; ``subscribers`` filters these entries so callers only see live objects.
+/// - `NSMapTable.weakToStrongObjects()` — maps each subscriber to its callback
+///   `DispatchQueue`. Entries are removed when the subscriber is deallocated.
 ///
-/// All access is serialized through an internal lock to ensure safe concurrent usage
-/// from multiple threads.
+/// ### Thread Safety
+/// All reads and writes are serialized through an `NSLock`, making it safe to
+/// subscribe, unsubscribe, and iterate from any thread or queue concurrently.
+///
+/// ### Typical Usage
+/// You rarely interact with this class directly. Instead, declare it as the
+/// ``DelegateMultiCasting/delegates`` property and let the protocol's default
+/// implementations handle the rest:
+/// ```swift
+/// final class MyService: DelegateMultiCasting, @unchecked Sendable {
+///     typealias Delegate = any MyDelegate
+///     let delegates: any DelegateSubscription = DelegateSubscriptionHandle()
+/// }
+/// ```
 public final class DelegateSubscriptionHandle: DelegateSubscription, @unchecked Sendable {
 
     // MARK: - Properties
