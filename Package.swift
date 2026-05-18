@@ -12,12 +12,17 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "UtilityKit",
+            name: "MultiCastDelegate",
             targets: [
                 "MultiCastDelegate",
-                "DependencyResolver"
             ]
         ),
+        .library(
+            name: "DependencyResolver",
+            targets: [
+                "DependencyResolver"
+            ]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/hmlongco/Factory", .upToNextMajor(from: .init(stringLiteral: "2.4.3"))),
