@@ -22,6 +22,12 @@ let package = Package(
             targets: [
                 "DependencyResolver"
             ]
+        ),
+        .library(
+            name: "Coordinator",
+            targets: [
+                "Coordinator"
+            ]
         )
     ],
     dependencies: [
@@ -41,11 +47,16 @@ let package = Package(
             ],
             path: "Sources/DependencyResolver"
         ),
+        .target(
+            name: "Coordinator",
+            path: "Sources/Coordinator"
+        ),
         .testTarget(
             name: "UtilityKitTests",
             dependencies: [
                 "MultiCastDelegate",
-                "DependencyResolver"
+                "DependencyResolver",
+                "Coordinator"
             ]
         ),
     ],
