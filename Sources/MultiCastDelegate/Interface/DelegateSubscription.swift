@@ -17,10 +17,16 @@ import Foundation
 /// You can provide your own if you need custom storage semantics (e.g., strong references
 /// or a different threading model).
 ///
-/// - Note: This protocol operates on `any MultiCastDelegate` existentials.
-///   Type-safe access is provided by ``DelegateMultiCasting``, which bridges
-///   its generic `Delegate` associated type to these methods automatically.
-public protocol DelegateSubscription: Sendable {
+/// ## Design Notes
+/// - **Class-only (`AnyObject`)**: A subscription store holds shared mutable state
+///   (the subscriber list and queue map). Conformers must be reference types so the
+///   same store backs every read and write — a value-type implementation would diverge
+///   on each copy and break the multicaster's invariants.
+/// - **Existential-based**: This protocol operates on `any MultiCastDelegate` so a single
+///   subscription store can hold heterogeneous delegate types. Type-safe access is
+///   provided by ``DelegateMultiCasting``, which bridges its generic `Delegate`
+///   associated type to these methods automatically.
+public protocol DelegateSubscription: AnyObject, Sendable {
 
     /// All currently live subscribers.
     ///

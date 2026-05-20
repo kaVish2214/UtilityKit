@@ -9,11 +9,11 @@ import Foundation
 
 /// The base protocol for any type that can receive multicast delegate callbacks.
 ///
-/// Conforming types must be class-based (`NSObjectProtocol`) to support:
-/// - **Weak reference storage** — subscribers are stored in `NSHashTable.weakObjects()`
-///   and are automatically cleaned up when deallocated.
-/// - **Identity-based equality** — `NSObjectProtocol` provides `isEqual(_:)` and `hash`,
-///   which ``DelegateSubscriptionHandle`` relies on for subscription management.
+/// Conforming types must be class-based (`AnyObject`) so that subscribers can be:
+/// - **Stored weakly** — ``DelegateSubscriptionHandle`` uses `NSHashTable.weakObjects()`,
+///   which automatically removes subscribers when they are deallocated.
+/// - **Identified by reference** — subscription management relies on object identity
+///   to add and remove specific subscribers.
 ///
 /// Create a domain-specific delegate protocol by extending `MultiCastDelegate`:
 /// ```swift
@@ -24,6 +24,17 @@ import Foundation
 /// ```
 ///
 /// Then use it as the `Delegate` associated type of a ``DelegateMultiCasting`` conformance.
-public protocol MultiCastDelegate: NSObjectProtocol, Sendable {
+///
+/// ## Design Note
+/// `MultiCastDelegate` only requires `AnyObject` so that pure-Swift classes can adopt it
+/// without any Objective-C runtime overhead. If your delegate protocol needs to expose
+/// `@objc` methods, optional requirements, or interoperate with Objective-C, refine your
+/// protocol to also require `NSObjectProtocol`:
+/// ```swift
+/// @objc protocol VideoPlayerDelegate: MultiCastDelegate, NSObjectProtocol {
+///     @objc optional func playerDidPause()
+/// }
+/// ```
+public protocol MultiCastDelegate: AnyObject, Sendable {
 
 }

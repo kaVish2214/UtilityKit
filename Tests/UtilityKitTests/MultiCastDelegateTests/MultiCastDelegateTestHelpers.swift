@@ -1,7 +1,7 @@
 import Foundation
 @testable import MultiCastDelegate
 
-final class MockDelegate: NSObject, MultiCastDelegate, @unchecked Sendable {
+final class MockDelegate: MultiCastDelegate, @unchecked Sendable {
     private let lock = NSLock()
     private var _receivedValues: [Int] = []
 
