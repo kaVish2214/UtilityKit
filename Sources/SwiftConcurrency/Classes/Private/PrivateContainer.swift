@@ -15,6 +15,7 @@ import Synchronization
 
 // MARK: - OSAllocatedUnfairLock conformance (iOS 16+ / macOS 13+)
 
+@available(macOS 13.0, *)
 @available(iOS 16.0, *)
 extension OSAllocatedUnfairLock: ConcurrencyContainerProtocol {}
 
