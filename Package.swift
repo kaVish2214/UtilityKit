@@ -28,6 +28,12 @@ let package = Package(
             targets: [
                 "Coordinator"
             ]
+        ),
+        .library(
+            name: "SwiftConcurrency",
+            targets: [
+                "SwiftConcurrency"
+            ]
         )
     ],
     dependencies: [
@@ -51,12 +57,17 @@ let package = Package(
             name: "Coordinator",
             path: "Sources/Coordinator"
         ),
+        .target(
+            name: "SwiftConcurrency",
+            path: "Sources/SwiftConcurrency"
+        ),
         .testTarget(
             name: "UtilityKitTests",
             dependencies: [
                 "MultiCastDelegate",
                 "DependencyResolver",
-                "Coordinator"
+                "Coordinator",
+                "SwiftConcurrency"
             ]
         ),
     ],
