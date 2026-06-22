@@ -63,7 +63,7 @@ import Foundation
 /// `Sendable`. Passing a `Sendable` value through this initializer is equally
 /// safe — `sending` accepts any value the type system can prove is unique at the
 /// call site, which `Sendable` values trivially are.
-public protocol ConcurrencyContainerProtocol<State> {
+public protocol ConcurrencyContainerProtocol<State>: Sendable {
 
     /// The type of value held under the lock.
     associatedtype State
