@@ -19,9 +19,11 @@ public protocol ConcurrencyContainerProtocol<State> {
     func withLock<R>(_ body: @Sendable (inout State) throws -> R) rethrows -> R where R: Sendable
 }
 
-//extension ConcurrencyContainerProtocol where State: Sendable {
-//    
-//    public init(initialState: State)
-//}
-//
-//
+extension ConcurrencyContainerProtocol where State: Sendable {
+    
+    public init(initialState: State) {
+        self.init(uncheckedState: initialState)
+    }
+}
+
+
