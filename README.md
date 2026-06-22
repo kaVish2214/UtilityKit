@@ -1,12 +1,13 @@
 # UtilityKit
 
-A Swift Package that bundles three small, focused libraries used across iOS and macOS apps:
+A Swift Package that bundles four small, focused libraries used across iOS and macOS apps:
 
 | Product              | What it gives you                                                                                  |
 |----------------------|----------------------------------------------------------------------------------------------------|
 | `MultiCastDelegate`  | A type-safe, thread-safe, one-to-many delegate pattern with per-subscriber dispatch queues.        |
 | `DependencyResolver` | A thin protocol façade over [Factory](https://github.com/hmlongco/Factory) for DI registration & resolution. |
 | `Coordinator`        | A coordinator-driven UI architecture that works for SwiftUI, UIKit, AppKit, and SwiftUI-in-UIKit.  |
+| `SwiftConcurrency`   | An OS-adaptive lock-box (`Mutex` / `OSAllocatedUnfairLock` / `NSLock`) behind one tiny protocol.   |
 
 - **Swift tools:** 6.3
 - **Swift language mode:** 6
@@ -27,7 +28,8 @@ targets: [
         dependencies: [
             .product(name: "MultiCastDelegate",  package: "UtilityKit"),
             .product(name: "DependencyResolver", package: "UtilityKit"),
-            .product(name: "Coordinator",        package: "UtilityKit")
+            .product(name: "Coordinator",        package: "UtilityKit"),
+            .product(name: "SwiftConcurrency",   package: "UtilityKit")
         ]
     )
 ]
@@ -417,9 +419,87 @@ A quick rule for keeping the layers clean:
 
 ---
 
+## 4. `SwiftConcurrency`
+
+An OS-adaptive lock-box for protecting a single piece of mutable state. Pick the protocol; the concrete container picks the fastest backend available on the running OS.
+
+### Public Surface
+
+| Symbol                          | Role                                                                                                     |
+|---------------------------------|----------------------------------------------------------------------------------------------------------|
+| `ConcurrencyContainerProtocol`  | The protocol contract: one piece of state, mutated under exclusive access via `withLock` / `withLockUnchecked`. |
+| `ConcurrencySafeContainer`      | Default implementation. Selects the best backend at runtime — `Mutex` → `OSAllocatedUnfairLock` → `NSLock`. |
+
+### Backend Selection
+
+| Backend                  | Selected on                | Notes                                              |
+|--------------------------|----------------------------|----------------------------------------------------|
+| `Mutex` (Synchronization)| iOS 18+ / macOS 15+        | Preferred when available — fast and non-blocking.  |
+| `OSAllocatedUnfairLock`  | iOS 16+ / macOS 13+        | OS-allocated unfair lock.                          |
+| `NSLock` fallback        | All supported deployments  | Universal fallback (`LegacyConcurrencySafe`).      |
+
+The selection is transparent to callers: they only ever see the protocol surface.
+
+### Two Mutation Methods
+
+| Method                    | Sendable enforcement?                                | When to use                                                                 |
+|---------------------------|------------------------------------------------------|------------------------------------------------------------------------------|
+| `withLock(_:)`            | Yes — `@Sendable` closure and `Sendable` return.     | **Default.** Compiler-checked safety.                                       |
+| `withLockUnchecked(_:)`   | No.                                                  | When you must return or mutate a non-`Sendable` value (e.g., a legacy class). |
+
+### Initialization
+
+There is a single entry point: `init(uncheckedState:)`. It takes `sending State`, so the caller transfers ownership of the value into the container. This works equally well for `Sendable` and non-`Sendable` state — `Sendable` values trivially satisfy `sending`, and non-`Sendable` values are made safe by the transfer.
+
+### Design Choices
+
+- **One contract, many backends.** The runtime branch lives entirely inside `ConcurrencySafeContainer.init`. Call sites never see `#available` checks.
+- **A single initializer.** `init(uncheckedState:)` covers every case — `Sendable` or not. There's no parallel `init(initialState:)`; one entry point keeps the surface tiny and removes any ambiguity about which init is "the right one."
+- **`sending` for ownership transfer.** Taking `sending State` means the caller hands the value to the container exclusively. Once constructed, the value is reachable only through `withLock` / `withLockUnchecked`, which is what makes the container a safe concurrency boundary even when `State` isn't `Sendable`.
+- **`@unchecked Sendable` on the container.** The wrapper carries no mutable state of its own; the backend handles synchronization. Marking the wrapper `@unchecked Sendable` lets it cross isolation boundaries while keeping the lock invariants intact.
+
+### Usage
+
+**`Sendable` state — the common case:**
+```swift
+let counter = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+
+counter.withLock { state in
+    state += 1
+}
+
+let snapshot = counter.withLock { state in state }   // 1
+```
+
+**Non-`Sendable` state (legacy classes, UIKit objects):**
+```swift
+let cache = ConcurrencySafeContainer<NSMutableDictionary>(uncheckedState: NSMutableDictionary())
+
+cache.withLockUnchecked { dict in
+    dict["key"] = "value"
+}
+```
+
+**Concurrent writes from multiple tasks:**
+```swift
+let totals = ConcurrencySafeContainer<[String: Int]>(uncheckedState: [:])
+
+await withTaskGroup(of: Void.self) { group in
+    for word in words {
+        group.addTask {
+            totals.withLock { dict in
+                dict[word, default: 0] += 1
+            }
+        }
+    }
+}
+```
+
+---
+
 ## Testing
 
-The package ships a `UtilityKitTests` test target that exercises every product (see `Tests/UtilityKitTests/CoordinatorTests`, `DependencyResolverTests`, `MultiCastDelegateTests`). Tests are written with the [Swift Testing](https://developer.apple.com/documentation/testing/) framework.
+The package ships a `UtilityKitTests` test target that exercises every product (see `Tests/UtilityKitTests/CoordinatorTests`, `DependencyResolverTests`, `MultiCastDelegateTests`, `SwiftConcurrencyTests`). Tests are written with the [Swift Testing](https://developer.apple.com/documentation/testing/) framework.
 
 Run them from Xcode or the command line:
 
