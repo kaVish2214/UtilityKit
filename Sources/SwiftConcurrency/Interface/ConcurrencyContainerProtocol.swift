@@ -31,8 +31,8 @@ import Foundation
 ///
 /// ## Usage
 /// ```swift
-/// // Sendable state — pass directly via uncheckedState:.
-/// let counter = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+/// // Sendable state — pass directly.
+/// let counter = ConcurrencySafeContainer<Int>(0)
 ///
 /// counter.withLock { state in
 ///     state += 1
@@ -41,7 +41,7 @@ import Foundation
 /// let snapshot = counter.withLock { state in state }
 ///
 /// // Non-Sendable state — same entry point, ownership transfers in.
-/// let cache = ConcurrencySafeContainer<NSMutableDictionary>(uncheckedState: NSMutableDictionary())
+/// let cache = ConcurrencySafeContainer<NSMutableDictionary>(NSMutableDictionary())
 /// cache.withLockUnchecked { dict in
 ///     dict["key"] = "value"
 /// }
@@ -55,7 +55,7 @@ import Foundation
 ///   isn't `Sendable` (e.g., a legacy class). You become responsible for guaranteeing
 ///   no aliasing escapes the closure.
 ///
-/// ## Why `init(uncheckedState:)` Takes `sending State`
+/// ## Why `init(_:)` Takes `sending State`
 /// The initializer accepts the initial state as `sending`, so callers **transfer**
 /// ownership of the value into the container. Once constructed, the value is only
 /// reachable through ``withLockUnchecked(_:)`` or ``withLock(_:)``, which is what
@@ -63,18 +63,25 @@ import Foundation
 /// `Sendable`. Passing a `Sendable` value through this initializer is equally
 /// safe — `sending` accepts any value the type system can prove is unique at the
 /// call site, which `Sendable` values trivially are.
+///
+/// ## Why the Protocol Refines `Sendable`
+/// Every conformer is required to be `Sendable` so the container can cross isolation
+/// boundaries (be captured by tasks, stored in actors, passed between threads)
+/// without ceremony. The lock inside each conformer is what makes that safe; refining
+/// the protocol on `Sendable` simply surfaces that contract at the type level so the
+/// compiler can enforce it everywhere a `ConcurrencyContainerProtocol` is used.
 public protocol ConcurrencyContainerProtocol<State>: Sendable {
 
     /// The type of value held under the lock.
     associatedtype State
 
-    /// Creates a container holding `initialState`.
+    /// Creates a container holding `state`.
     ///
     /// Marked `sending` so callers transfer ownership of the value into the container.
     /// Once constructed, the state can only be accessed through ``withLockUnchecked(_:)``
     /// or ``withLock(_:)``.
     ///
-    /// - Parameter initialState: The starting value. Ownership is transferred into the
+    /// - Parameter state: The starting value. Ownership is transferred into the
     ///   container.
     init(_ state: sending State)
 

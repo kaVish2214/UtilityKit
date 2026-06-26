@@ -9,7 +9,7 @@ struct ConcurrencyContainerProtocolTests {
 
     @Test("Container can be held as an existential ConcurrencyContainerProtocol")
     func usableAsExistential() {
-        let container: any ConcurrencyContainerProtocol<Int> = ConcurrencySafeContainer<Int>(uncheckedState: 1)
+        let container: any ConcurrencyContainerProtocol<Int> = ConcurrencySafeContainer<Int>(1)
 
         container.withLockUnchecked { $0 += 41 }
 
@@ -25,7 +25,7 @@ struct ConcurrencyContainerProtocolTests {
             container.withLockUnchecked { $0 += 1 }
         }
 
-        let container = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+        let container = ConcurrencySafeContainer<Int>(0)
         bump(container)
         bump(container)
         bump(container)

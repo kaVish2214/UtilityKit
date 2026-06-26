@@ -27,35 +27,37 @@ import os
 /// (``withLockUnchecked(_:)`` / ``withLock(_:)``) and never need to branch on OS
 /// availability themselves.
 ///
-/// ## Why `@unchecked Sendable`
-/// The wrapper itself doesn't expose any mutable state; all mutation flows through the
-/// backend, which is responsible for thread safety. `@unchecked Sendable` lets the
-/// container be passed across isolation boundaries without ceremony, while the lock
-/// guarantees soundness.
+/// ## Sendable Synthesis
+/// The struct doesn't need `@unchecked Sendable`. `ConcurrencyContainerProtocol`
+/// refines `Sendable`, so `any ConcurrencyContainerProtocol<State>` — the only
+/// stored property's type — is `Sendable`. With every stored field `Sendable`,
+/// the compiler synthesizes `Sendable` conformance for the struct automatically,
+/// even when `State` itself is not `Sendable` (the value lives inside the backend's
+/// lock, never directly on the struct).
 ///
 /// ## Usage
 /// ```swift
 /// // Sendable state.
-/// let counter = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+/// let counter = ConcurrencySafeContainer<Int>(0)
 /// counter.withLock { $0 += 1 }
 /// let snapshot = counter.withLock { $0 }
 ///
 /// // Non-Sendable state — same entry point, ownership transfers in.
-/// let cache = ConcurrencySafeContainer<NSMutableDictionary>(uncheckedState: NSMutableDictionary())
+/// let cache = ConcurrencySafeContainer<NSMutableDictionary>(NSMutableDictionary())
 /// cache.withLockUnchecked { dict in
 ///     dict["key"] = "value"
 /// }
 /// ```
-public struct ConcurrencySafeContainer<State>: ConcurrencyContainerProtocol, @unchecked Sendable {
+public struct ConcurrencySafeContainer<State>: ConcurrencyContainerProtocol {
 
     /// The OS-selected backend doing the actual locking.
     private let backend: any ConcurrencyContainerProtocol<State>
 
-    /// Creates a container holding `initialState`, choosing the best backend
-    /// available on the current OS (`Mutex` → `OSAllocatedUnfairLock` → `NSLock`).
+    /// Creates a container holding `state`, choosing the best backend available on
+    /// the current OS (`Mutex` → `OSAllocatedUnfairLock` → `NSLock`).
     ///
-    /// - Parameter initialState: The starting value. Ownership is transferred into
-    ///   the container.
+    /// - Parameter state: The starting value. Ownership is transferred into the
+    ///   container.
     public init(_ state: sending State) {
         #if canImport(Synchronization)
         if #available(iOS 18.0, macOS 15.0, *) {

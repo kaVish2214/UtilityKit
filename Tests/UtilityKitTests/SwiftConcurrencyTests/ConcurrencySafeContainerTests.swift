@@ -7,18 +7,18 @@ struct ConcurrencySafeContainerTests {
 
     // MARK: - Initialization
 
-    @Test("init(uncheckedState:) seeds the container with a Sendable value")
+    @Test("init(_:) seeds the container with a Sendable value")
     func initialStateSeed() {
-        let container = ConcurrencySafeContainer<Int>(uncheckedState: 7)
+        let container = ConcurrencySafeContainer<Int>(7)
 
         let value = container.withLock { $0 }
 
         #expect(value == 7)
     }
 
-    @Test("init(uncheckedState:) seeds the container with non-Sendable state")
+    @Test("init(_:) seeds the container with non-Sendable state")
     func initialStateUnchecked() {
-        let container = ConcurrencySafeContainer<NonSendableBox>(uncheckedState: NonSendableBox(11))
+        let container = ConcurrencySafeContainer<NonSendableBox>(NonSendableBox(11))
 
         let value = container.withLockUnchecked { $0.value }
 
@@ -29,7 +29,7 @@ struct ConcurrencySafeContainerTests {
 
     @Test("withLock mutates the state in place")
     func withLockMutates() {
-        let container = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+        let container = ConcurrencySafeContainer<Int>(0)
 
         container.withLock { state in
             state += 1
@@ -43,7 +43,7 @@ struct ConcurrencySafeContainerTests {
 
     @Test("withLock returns the closure's value")
     func withLockReturns() {
-        let container = ConcurrencySafeContainer<String>(uncheckedState: "hello")
+        let container = ConcurrencySafeContainer<String>("hello")
 
         let length = container.withLock { state -> Int in
             state.count
@@ -55,7 +55,7 @@ struct ConcurrencySafeContainerTests {
     @Test("withLock rethrows errors thrown by the body")
     func withLockRethrows() {
         struct Boom: Error, Equatable {}
-        let container = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+        let container = ConcurrencySafeContainer<Int>(0)
 
         #expect(throws: Boom.self) {
             try container.withLock { _ in
@@ -68,7 +68,7 @@ struct ConcurrencySafeContainerTests {
 
     @Test("withLockUnchecked mutates non-Sendable state")
     func withLockUncheckedMutates() {
-        let container = ConcurrencySafeContainer<NonSendableBox>(uncheckedState: NonSendableBox(0))
+        let container = ConcurrencySafeContainer<NonSendableBox>(NonSendableBox(0))
 
         container.withLockUnchecked { box in
             box.value = 42
@@ -80,7 +80,7 @@ struct ConcurrencySafeContainerTests {
 
     @Test("withLockUnchecked can return non-Sendable references")
     func withLockUncheckedReturnsReference() {
-        let container = ConcurrencySafeContainer<NonSendableBox>(uncheckedState: NonSendableBox(99))
+        let container = ConcurrencySafeContainer<NonSendableBox>(NonSendableBox(99))
 
         let box = container.withLockUnchecked { $0 }
 
@@ -90,7 +90,7 @@ struct ConcurrencySafeContainerTests {
     @Test("withLockUnchecked rethrows errors thrown by the body")
     func withLockUncheckedRethrows() {
         struct Boom: Error, Equatable {}
-        let container = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+        let container = ConcurrencySafeContainer<Int>(0)
 
         #expect(throws: Boom.self) {
             try container.withLockUnchecked { _ in
@@ -103,7 +103,7 @@ struct ConcurrencySafeContainerTests {
 
     @Test("Concurrent increments from many tasks all land")
     func concurrentIncrements() async {
-        let container = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+        let container = ConcurrencySafeContainer<Int>(0)
         let iterations = 1_000
 
         await withTaskGroup(of: Void.self) { group in
@@ -119,7 +119,7 @@ struct ConcurrencySafeContainerTests {
 
     @Test("Concurrent reads and writes don't crash or corrupt state")
     func concurrentReadWrite() async {
-        let container = ConcurrencySafeContainer<[Int]>(uncheckedState: [])
+        let container = ConcurrencySafeContainer<[Int]>([])
         let writers = 200
 
         await withTaskGroup(of: Void.self) { group in
@@ -142,7 +142,7 @@ struct ConcurrencySafeContainerTests {
 
     @Test("Concurrent dictionary writes preserve every key")
     func concurrentDictionaryWrites() async {
-        let container = ConcurrencySafeContainer<[String: Int]>(uncheckedState: [:])
+        let container = ConcurrencySafeContainer<[String: Int]>([:])
         let keys = (0..<500).map { "key-\($0)" }
 
         await withTaskGroup(of: Void.self) { group in
@@ -164,8 +164,8 @@ struct ConcurrencySafeContainerTests {
 
     @Test("Container holds independent state per instance")
     func independentInstances() {
-        let containerA = ConcurrencySafeContainer<Int>(uncheckedState: 0)
-        let containerB = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+        let containerA = ConcurrencySafeContainer<Int>(0)
+        let containerB = ConcurrencySafeContainer<Int>(0)
 
         containerA.withLock { $0 = 10 }
         containerB.withLock { $0 = 20 }

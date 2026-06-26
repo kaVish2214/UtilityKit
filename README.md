@@ -449,20 +449,53 @@ The selection is transparent to callers: they only ever see the protocol surface
 
 ### Initialization
 
-There is a single entry point: `init(uncheckedState:)`. It takes `sending State`, so the caller transfers ownership of the value into the container. This works equally well for `Sendable` and non-`Sendable` state — `Sendable` values trivially satisfy `sending`, and non-`Sendable` values are made safe by the transfer.
+There is a single entry point: `init(_:)`. It takes `sending State`, so the caller transfers ownership of the value into the container. This works equally well for `Sendable` and non-`Sendable` state — `Sendable` values trivially satisfy `sending`, and non-`Sendable` values are made safe by the transfer.
+
+### Protocol-Level `Sendable`
+
+`ConcurrencyContainerProtocol` refines `Sendable`:
+
+```swift
+public protocol ConcurrencyContainerProtocol<State>: Sendable { … }
+```
+
+Every conformer is therefore safe to capture by `Task`s, store in actors, or pass between threads. The lock inside each conformer makes that promise true; refining the protocol on `Sendable` surfaces it at the type level so callers don't have to opt in (or assert it) at each call site.
+
+### Why `OSAllocatedUnfairLock` Conforms Directly but `Mutex` Needs a Wrapper
+
+`OSAllocatedUnfairLock` happens to ship `withLock` / `withLockUnchecked` in exactly the protocol's shape, so its conformance is a one-line bridge over the init label:
+
+```swift
+@available(iOS 16.0, macOS 13.0, *)
+extension OSAllocatedUnfairLock: ConcurrencyContainerProtocol {
+    public init(_ state: sending State) { self.init(uncheckedState: state) }
+}
+```
+
+`Mutex` (from `Synchronization`) can't take the same path because it diverges on four axes:
+
+| Aspect              | `OSAllocatedUnfairLock`             | `Mutex`                                                   |
+|---------------------|-------------------------------------|-----------------------------------------------------------|
+| Copyability         | `Copyable`                          | `~Copyable` — can't conform to a `Copyable` protocol.     |
+| Init label          | `init(uncheckedState:)`             | `init(_:)` — bridged by the extension above.              |
+| `withLock` body     | `(inout State)`                     | `(inout sending Value)` + typed throws + `~Copyable` result. |
+| `withLockUnchecked` | Native method                       | Doesn't exist.                                            |
+
+The `~Copyable` difference alone is fatal — the rest only compounds it. So `Mutex` is wrapped by `MutexBox` (a `final class`, hence `Copyable`) that re-exposes the API under the protocol's signatures.
 
 ### Design Choices
 
 - **One contract, many backends.** The runtime branch lives entirely inside `ConcurrencySafeContainer.init`. Call sites never see `#available` checks.
-- **A single initializer.** `init(uncheckedState:)` covers every case — `Sendable` or not. There's no parallel `init(initialState:)`; one entry point keeps the surface tiny and removes any ambiguity about which init is "the right one."
+- **Protocol refines `Sendable`.** Conformers are guaranteed safe to cross isolation boundaries; the lock is what makes that promise sound.
+- **A single initializer.** `init(_:)` covers every case — `Sendable` or not. One entry point keeps the surface tiny and removes any ambiguity about which init is "the right one."
 - **`sending` for ownership transfer.** Taking `sending State` means the caller hands the value to the container exclusively. Once constructed, the value is reachable only through `withLock` / `withLockUnchecked`, which is what makes the container a safe concurrency boundary even when `State` isn't `Sendable`.
-- **`@unchecked Sendable` on the container.** The wrapper carries no mutable state of its own; the backend handles synchronization. Marking the wrapper `@unchecked Sendable` lets it cross isolation boundaries while keeping the lock invariants intact.
+- **`Sendable` is synthesized — no `@unchecked` needed.** Because `ConcurrencyContainerProtocol` refines `Sendable`, the existential `any ConcurrencyContainerProtocol<State>` stored as the backend is itself `Sendable`. That's the struct's only stored field, so the compiler synthesizes `Sendable` for the container automatically — even when `State` isn't `Sendable`, since the value lives behind the backend's lock and never on the struct directly.
 
 ### Usage
 
 **`Sendable` state — the common case:**
 ```swift
-let counter = ConcurrencySafeContainer<Int>(uncheckedState: 0)
+let counter = ConcurrencySafeContainer<Int>(0)
 
 counter.withLock { state in
     state += 1
@@ -473,7 +506,7 @@ let snapshot = counter.withLock { state in state }   // 1
 
 **Non-`Sendable` state (legacy classes, UIKit objects):**
 ```swift
-let cache = ConcurrencySafeContainer<NSMutableDictionary>(uncheckedState: NSMutableDictionary())
+let cache = ConcurrencySafeContainer<NSMutableDictionary>(NSMutableDictionary())
 
 cache.withLockUnchecked { dict in
     dict["key"] = "value"
@@ -482,7 +515,7 @@ cache.withLockUnchecked { dict in
 
 **Concurrent writes from multiple tasks:**
 ```swift
-let totals = ConcurrencySafeContainer<[String: Int]>(uncheckedState: [:])
+let totals = ConcurrencySafeContainer<[String: Int]>([:])
 
 await withTaskGroup(of: Void.self) { group in
     for word in words {
