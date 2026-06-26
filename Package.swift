@@ -3,6 +3,13 @@
 
 import PackageDescription
 
+let swiftSettings: [SwiftSetting] = [
+    .unsafeFlags([
+        "-Xfrontend", "-warn-long-function-bodies=100",
+        "-Xfrontend", "-warn-long-expression-type-checking=100"
+    ])
+]
+
 let package = Package(
     name: "UtilityKit",
     platforms: [
@@ -44,22 +51,26 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "MultiCastDelegate",
-            path: "Sources/MultiCastDelegate"
+            path: "Sources/MultiCastDelegate",
+            swiftSettings: swiftSettings
         ),
         .target(
             name: "DependencyResolver",
             dependencies: [
                 .product(name: "Factory", package: "Factory")
             ],
-            path: "Sources/DependencyResolver"
+            path: "Sources/DependencyResolver",
+            swiftSettings: swiftSettings
         ),
         .target(
             name: "Coordinator",
-            path: "Sources/Coordinator"
+            path: "Sources/Coordinator",
+            swiftSettings: swiftSettings
         ),
         .target(
             name: "SwiftConcurrency",
-            path: "Sources/SwiftConcurrency"
+            path: "Sources/SwiftConcurrency",
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "UtilityKitTests",
