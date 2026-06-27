@@ -1,5 +1,10 @@
 # UtilityKit
 
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](LICENSE)
+[![Swift](https://img.shields.io/badge/Swift-6.3-orange.svg)](https://swift.org)
+[![Swift Package Manager](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+[![Platforms](https://img.shields.io/badge/Platforms-iOS%2014%2B%20%7C%20macOS%2010.15%2B-blue.svg)](https://developer.apple.com)
+
 A Swift Package that bundles four small, focused libraries used across iOS and macOS apps:
 
 | Product              | What it gives you                                                                                  |
@@ -13,6 +18,7 @@ A Swift Package that bundles four small, focused libraries used across iOS and m
 - **Swift language mode:** 6
 - **Platforms:** iOS 14+, macOS 10.15+
 - **Dependencies:** [Factory](https://github.com/hmlongco/Factory) (`upToNextMajor` from 2.4.3)
+- **License:** Mozilla Public License 2.0 (MPL-2.0)
 
 ## Installation
 
@@ -20,7 +26,7 @@ Add UtilityKit to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "<repo-url>", from: "<version>")
+    .package(url: "https://github.com/kaVish2214/UtilityKit.git", from: "0.1.0")
 ],
 targets: [
     .target(
@@ -539,3 +545,16 @@ Run them from Xcode or the command line:
 ```bash
 swift test
 ```
+
+---
+
+## Contributing
+
+Bug reports, feature requests, and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community expectations. A running list of changes lives in [CHANGELOG.md](CHANGELOG.md).
+
+## License
+
+UtilityKit is licensed under the Mozilla Public License 2.0 (MPL-2.0). Copyright (c) 2026 kaVi Gevariya (@kaVish2214).
+
+You may use, modify, distribute, and sell modified versions of this package. Modifications to MPL-covered source files must remain available under MPL-2.0. See [LICENSE](LICENSE) for the full license terms.
+
