@@ -81,6 +81,7 @@ public struct ConcurrencySafeContainer<State>: ConcurrencyContainerProtocol {
     /// `Sendable` enforcement so non-`Sendable` values can be returned.
     ///
     /// Prefer ``withLock(_:)`` whenever the closure can be `@Sendable`.
+    @discardableResult
     public func withLockUnchecked<R>(_ body: (inout State) throws -> R) rethrows -> R {
         try backend.withLockUnchecked(body)
     }
@@ -88,6 +89,7 @@ public struct ConcurrencySafeContainer<State>: ConcurrencyContainerProtocol {
     /// Runs `body` with exclusive, mutable access to the protected state. Both the
     /// closure and its return value are required to be `Sendable`, so the compiler
     /// rules out non-`Sendable` aliasing leaking out of the lock.
+    @discardableResult
     public func withLock<R>(_ body: @Sendable (inout State) throws -> R) rethrows -> R where R: Sendable {
         try backend.withLock(body)
     }

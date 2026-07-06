@@ -99,6 +99,7 @@ public protocol ConcurrencyContainerProtocol<State>: Sendable {
     ///
     /// - Parameter body: A closure that receives exclusive mutable access to the state.
     /// - Returns: Whatever `body` returns.
+    @discardableResult
     func withLockUnchecked<R>(_ body: (inout State) throws -> R) rethrows -> R
 
     /// Runs `body` with exclusive, mutable access to the protected state. Both the
@@ -110,5 +111,6 @@ public protocol ConcurrencyContainerProtocol<State>: Sendable {
     /// - Parameter body: A `@Sendable` closure that receives exclusive mutable access
     ///   to the state.
     /// - Returns: The closure's `Sendable` return value.
+    @discardableResult
     func withLock<R>(_ body: @Sendable (inout State) throws -> R) rethrows -> R where R: Sendable
 }

@@ -67,6 +67,7 @@ final class MutexBox<State>: ConcurrencyContainerProtocol, @unchecked Sendable {
     }
 
     /// Forwards to `Mutex.withLock` without `Sendable` enforcement.
+    @discardableResult
     func withLockUnchecked<R>(_ body: (inout sending State) throws -> R) rethrows -> R {
         try mutex.withLock { state in
             try body(&state)
@@ -75,6 +76,7 @@ final class MutexBox<State>: ConcurrencyContainerProtocol, @unchecked Sendable {
 
     /// Forwards to `Mutex.withLock` with `Sendable` enforcement on the body and the
     /// return value.
+    @discardableResult
     func withLock<R>(_ body: @Sendable (inout sending State) throws -> R) rethrows -> R where R: Sendable {
         try mutex.withLock { state in
             try body(&state)
@@ -106,6 +108,7 @@ final class LegacyConcurrencySafe<State>: ConcurrencyContainerProtocol, @uncheck
     }
 
     /// Acquires the lock, runs `body`, releases the lock.
+    @discardableResult
     func withLockUnchecked<R>(_ body: (inout State) throws -> R) rethrows -> R {
         lock.lock()
         defer { lock.unlock() }
@@ -114,6 +117,7 @@ final class LegacyConcurrencySafe<State>: ConcurrencyContainerProtocol, @uncheck
 
     /// Acquires the lock, runs `body`, releases the lock. Requires `body` and `R` to
     /// be `Sendable` so the lock contract is compile-time checked.
+    @discardableResult
     func withLock<R>(_ body: @Sendable (inout State) throws -> R) rethrows -> R where R: Sendable {
         lock.lock()
         defer { lock.unlock() }
