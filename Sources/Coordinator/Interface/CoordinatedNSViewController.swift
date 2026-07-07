@@ -10,7 +10,7 @@
 //  SPDX-License-Identifier: MPL-2.0
 //
 
-#if canImport(AppKit)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
 
 import AppKit
 
@@ -99,8 +99,10 @@ import AppKit
 /// already satisfy `Sendable`.
 ///
 /// ## Comparison with `CoordinatedViewController`
-/// - **`CoordinatedViewController`** refines `UIViewController` and is iOS-only.
-/// - **`CoordinatedNSViewController`** refines `NSViewController` and is macOS-only.
+/// - **`CoordinatedViewController`** refines `UIViewController` and is available
+///   wherever UIKit is (iOS, iPadOS, and Mac Catalyst).
+/// - **`CoordinatedNSViewController`** refines `NSViewController` and is native
+///   macOS-only (excluded from Mac Catalyst, which uses the UIKit variant).
 /// - Both share the same role and design notes; pick the one matching the platform
 ///   you are building for.
 public protocol CoordinatedNSViewController: NSViewController {

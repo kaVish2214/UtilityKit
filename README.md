@@ -3,9 +3,9 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](LICENSE)
 [![Swift](https://img.shields.io/badge/Swift-6.3-orange.svg)](https://swift.org)
 [![Swift Package Manager](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
-[![Platforms](https://img.shields.io/badge/Platforms-iOS%2014%2B%20%7C%20macOS%2010.15%2B-blue.svg)](https://developer.apple.com)
+[![Platforms](https://img.shields.io/badge/Platforms-iOS%2014%2B%20%7C%20iPadOS%2014%2B%20%7C%20Mac%20Catalyst%2014%2B%20%7C%20macOS%2010.15%2B-blue.svg)](https://developer.apple.com)
 
-A Swift Package that bundles four small, focused libraries used across iOS and macOS apps:
+A Swift Package that bundles four small, focused libraries used across iOS, iPadOS, Mac Catalyst, and macOS apps:
 
 | Product              | What it gives you                                                                                  |
 |----------------------|----------------------------------------------------------------------------------------------------|
@@ -16,7 +16,7 @@ A Swift Package that bundles four small, focused libraries used across iOS and m
 
 - **Swift tools:** 6.3
 - **Swift language mode:** 6
-- **Platforms:** iOS 14+, macOS 10.15+
+- **Platforms:** iOS 14+ (iPhone & iPad), Mac Catalyst 14+, macOS 10.15+
 - **Dependencies:** [Factory](https://github.com/hmlongco/Factory) (`upToNextMajor` from 2.4.3)
 - **License:** Mozilla Public License 2.0 (MPL-2.0)
 
@@ -192,12 +192,12 @@ A coordinator-driven architecture for screen-level logic. The coordinator owns b
 |-------------------------------------|---------------------------|--------------------------------------------------------------------------------------------------|
 | `CoordinatorProtocol`               | All                       | The brain of a screen. Holds state, runs logic, calls into its `ViewDelegate` for UI-side work.  |
 | `CoordinatedView`                   | All                       | SwiftUI `View` that holds a coordinator and forwards user input to it.                           |
-| `CoordinatedViewController`         | iOS (`canImport(UIKit)`)  | UIKit `UIViewController` that holds a coordinator.                                               |
-| `CoordinatedNSViewController`       | macOS (`canImport(AppKit)`) | AppKit `NSViewController` that holds a coordinator.                                            |
-| `CoordinatedHostingViewController`  | iOS (`canImport(UIKit)`)  | `UIHostingController` bridge that hosts a `CoordinatedView` inside a UIKit nav stack.            |
-| `CoordinatedNSHostingController`    | macOS (`canImport(AppKit)`) | `NSHostingController` bridge that hosts a `CoordinatedView` inside an AppKit hierarchy.        |
+| `CoordinatedViewController`         | iOS / iPadOS / Mac Catalyst (`canImport(UIKit)`)  | UIKit `UIViewController` that holds a coordinator.                       |
+| `CoordinatedNSViewController`       | macOS (`canImport(AppKit) && !targetEnvironment(macCatalyst)`) | AppKit `NSViewController` that holds a coordinator.         |
+| `CoordinatedHostingViewController`  | iOS / iPadOS / Mac Catalyst (`canImport(UIKit)`)  | `UIHostingController` bridge that hosts a `CoordinatedView` inside a UIKit nav stack. |
+| `CoordinatedNSHostingController`    | macOS (`canImport(AppKit) && !targetEnvironment(macCatalyst)`) | `NSHostingController` bridge that hosts a `CoordinatedView` inside an AppKit hierarchy. |
 
-Each platform-specific protocol is wrapped in a `#if canImport(...)` guard, so importing `Coordinator` from a non-matching platform simply omits those symbols rather than failing to build.
+Each platform-specific protocol is wrapped in a `#if canImport(...)` guard, so importing `Coordinator` from a non-matching platform simply omits those symbols rather than failing to build. On **Mac Catalyst** the UIKit variants are used (Catalyst is a UIKit environment); the AppKit `NS*` variants are explicitly excluded there since `NSViewController`/`NSHostingController` aren't available on Catalyst.
 
 ### Architecture
 

@@ -10,7 +10,7 @@
 //  SPDX-License-Identifier: MPL-2.0
 //
 
-#if canImport(AppKit)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
 
 import SwiftUI
 

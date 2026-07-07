@@ -19,6 +19,7 @@ let package = Package(
     name: "UtilityKit",
     platforms: [
         .iOS(.v14),
+        .macCatalyst(.v14),
         .macOS(.v10_15)
     ],
     products: [

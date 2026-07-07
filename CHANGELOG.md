@@ -7,6 +7,16 @@ All notable changes to UtilityKit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-07-07
+
+### Added
+- **Mac Catalyst support.** Added `.macCatalyst(.v14)` to the package platforms. On Mac Catalyst the UIKit `Coordinator` variants (`CoordinatedViewController`, `CoordinatedHostingViewController`) are used, matching the Catalyst UIKit environment.
+
+### Changed
+- **Coordinator AppKit guards.** `CoordinatedNSViewController` and `CoordinatedNSHostingController` are now guarded with `#if canImport(AppKit) && !targetEnvironment(macCatalyst)`, excluding them from Mac Catalyst (where `NSViewController`/`NSHostingController` are unavailable) so the build resolves to the UIKit variants instead.
+
+> Note: iPad was already supported — the existing `.iOS(.v14)` platform covers both iPhone and iPad.
+
 ## [0.1.0] - 2026-06-27
 
 Initial public release.
@@ -21,4 +31,5 @@ Initial public release.
 - Mozilla Public License 2.0 (`LICENSE`) with SPDX `MPL-2.0` headers on every source, test, and helper file.
 - `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1).
 
+[0.1.1]: https://github.com/kaVish2214/UtilityKit/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/kaVish2214/UtilityKit/releases/tag/0.1.0
