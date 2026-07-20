@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480"
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+     role="img"
+     aria-label="UtilityKit: four small, focused libraries for Apple platforms. MultiCastDelegate — a type-safe, thread-safe one-to-many delegate pattern with per-subscriber queues. DependencyResolver — a thin protocol facade over Factory for registering and resolving dependencies. Coordinator — a coordinator-driven UI architecture for SwiftUI, UIKit and AppKit that routes user input to a coordinator and navigation to a view delegate. SwiftConcurrency — an OS-adaptive lock-box that selects Mutex, OSAllocatedUnfairLock or NSLock behind one protocol. Swift 6, iOS 14+, macOS and Mac Catalyst.">
+  <title>UtilityKit — four focused libraries: MultiCastDelegate, DependencyResolver, Coordinator &amp; SwiftConcurrency</title>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1A34"/>
+      <stop offset="1" stop-color="#050F1D"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5B8CFF"/>
+      <stop offset="0.4" stop-color="#3ECF8E"/>
+      <stop offset="0.72" stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#F0B429"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.6">
+      <stop offset="0" stop-color="#193668" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#050F1D" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.40"/>
+    </filter>
+    <filter id="spark" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="screen"><rect x="376" y="128" width="168" height="256" rx="12"/></clipPath>
+  </defs>
+
+  <rect x="1" y="1" width="898" height="478" rx="24" fill="url(#bg)" stroke="#173157" stroke-width="1.5"/>
+  <ellipse cx="460" cy="252" rx="340" ry="230" fill="url(#glow)"/>
+
+  <!-- ===== brand ===== -->
+  <g transform="translate(44,38)">
+    <rect x="1.5" y="1.5" width="30" height="30" rx="7" fill="#0C2247" stroke="url(#brand)" stroke-width="2.3"/>
+    <rect x="8"  y="8"  width="7" height="7" rx="1.6" fill="#5B8CFF"/>
+    <rect x="18" y="8"  width="7" height="7" rx="1.6" fill="#3ECF8E"/>
+    <rect x="8"  y="18" width="7" height="7" rx="1.6" fill="#A78BFA"/>
+    <rect x="18" y="18" width="7" height="7" rx="1.6" fill="#F0B429"/>
+    <text x="48" y="14" font-size="22" font-weight="700" fill="#EAF1FB">UtilityKit</text>
+    <text x="48" y="34" font-size="12.5" fill="#8AA0C2">Delegate · DI · Coordinator · Lock-box — Swift 6 &amp; Sendable</text>
+  </g>
+
+  <!-- ===== platform chips (top-right) ===== -->
+  <g font-size="11.5" fill="#C3D2E8" text-anchor="middle">
+    <g transform="translate(566,38)"><rect width="60" height="24" rx="12" fill="#102647" stroke="#284d84"/><text x="30" y="16">Swift 6</text></g>
+    <g transform="translate(634,38)"><rect width="62" height="24" rx="12" fill="#102647" stroke="#284d84"/><text x="31" y="16">iOS 14+</text></g>
+    <g transform="translate(704,38)"><rect width="58" height="24" rx="12" fill="#102647" stroke="#284d84"/><text x="29" y="16">macOS</text></g>
+    <g transform="translate(770,38)"><rect width="86" height="24" rx="12" fill="#102647" stroke="#284d84"/><text x="43" y="16">Mac Catalyst</text></g>
+  </g>
+
+  <!-- ===== product node (cycles the four libraries) ===== -->
+  <text x="130" y="206" font-size="11" fill="#8AA0C2" text-anchor="middle">Product</text>
+  <rect x="44" y="214" width="172" height="86" rx="16" fill="#0C2247" stroke="#274d89" filter="url(#soft)"/>
+
+  <!-- glyph crossfade -->
+  <g transform="translate(80,242)">
+    <!-- MultiCastDelegate — broadcast hub -->
+    <g stroke="#5B8CFF" stroke-width="1.7" fill="#5B8CFF">
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.22;0.25;1" values="1;1;0;0"/>
+      <g stroke="#5B8CFF" fill="none" stroke-linecap="round">
+        <line x1="14" y1="14" x2="4" y2="5"/>
+        <line x1="14" y1="14" x2="24" y2="5"/>
+        <line x1="14" y1="14" x2="14" y2="26"/>
+      </g>
+      <circle cx="14" cy="14" r="3.4"/>
+      <circle cx="4"  cy="5"  r="2.4"/>
+      <circle cx="24" cy="5"  r="2.4"/>
+      <circle cx="14" cy="26" r="2.4"/>
+    </g>
+    <!-- DependencyResolver — inject into container -->
+    <g opacity="0" stroke="#3ECF8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.25;0.27;0.47;0.5;1" values="0;0;1;1;0;0"/>
+      <path d="M4 20 L4 26 L24 26 L24 20"/>
+      <line x1="14" y1="3" x2="14" y2="18"/>
+      <path d="M9 13 L14 18 L19 13"/>
+    </g>
+    <!-- Coordinator — connected triangle of roles -->
+    <g opacity="0" stroke="#A78BFA" stroke-width="1.7" fill="#A78BFA">
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.5;0.52;0.72;0.75;1" values="0;0;1;1;0;0"/>
+      <g stroke="#A78BFA" fill="none" stroke-linejoin="round">
+        <path d="M14 4 L4 24 L24 24 Z"/>
+      </g>
+      <circle cx="14" cy="4"  r="2.8"/>
+      <circle cx="4"  cy="24" r="2.8"/>
+      <circle cx="24" cy="24" r="2.8"/>
+    </g>
+    <!-- SwiftConcurrency — padlock -->
+    <g opacity="0">
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.75;0.77;1" values="0;0;1;1"/>
+      <path d="M9 13 L9 9 A5 5 0 0 1 19 9 L19 13" fill="none" stroke="#F0B429" stroke-width="1.8"/>
+      <rect x="6" y="13" width="16" height="13" rx="2.5" fill="#F0B429"/>
+      <circle cx="14" cy="18.5" r="1.8" fill="#0C2247"/>
+      <rect x="13.2" y="18.5" width="1.6" height="4.5" rx="0.8" fill="#0C2247"/>
+    </g>
+  </g>
+
+  <!-- product name crossfade -->
+  <g font-size="14" font-weight="600" text-anchor="middle">
+    <text x="142" y="261" fill="#5B8CFF">Delegate
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.22;0.25;1" values="1;1;0;0"/>
+    </text>
+    <text x="142" y="261" fill="#3ECF8E" opacity="0">Resolver
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.25;0.27;0.47;0.5;1" values="0;0;1;1;0;0"/>
+    </text>
+    <text x="142" y="261" fill="#A78BFA" opacity="0">Coordinator
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.5;0.52;0.72;0.75;1" values="0;0;1;1;0;0"/>
+    </text>
+    <text x="142" y="261" fill="#F0B429" opacity="0">Lock-box
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.75;0.77;1" values="0;0;1;1"/>
+    </text>
+  </g>
+  <text x="130" y="286" font-size="9" fill="#8AA0C2" text-anchor="middle">pick-and-choose modules</text>
+
+  <!-- ===== import wire (product -> in your app) ===== -->
+  <line x1="216" y1="256" x2="360" y2="256" stroke="#274d89" stroke-width="2"/>
+  <text x="288" y="247" font-size="9" fill="#6E86AC" text-anchor="middle">import</text>
+  <g fill="#5B8CFF" filter="url(#spark)">
+    <circle cy="256" r="4">
+      <animate attributeName="cx" values="216;360" dur="1.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1"/>
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.8;1" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cy="256" r="4">
+      <animate attributeName="cx" values="216;360" dur="1.8s" begin="0.6s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1"/>
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.8;1" dur="1.8s" begin="0.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cy="256" r="4">
+      <animate attributeName="cx" values="216;360" dur="1.8s" begin="1.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1"/>
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.8;1" dur="1.8s" begin="1.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- ===== device (the library, in use) ===== -->
+  <text x="460" y="104" font-size="11" fill="#8AA0C2" text-anchor="middle">in your app</text>
+  <rect x="360" y="112" width="200" height="288" rx="30" fill="#0C2247" stroke="#274d89" stroke-width="2" filter="url(#soft)"/>
+  <rect x="376" y="128" width="168" height="256" rx="12" fill="#071731"/>
+  <rect x="436" y="118" width="48" height="6" rx="3" fill="#274d89"/>
+
+  <g clip-path="url(#screen)">
+    <rect x="376" y="128" width="168" height="256" fill="#071731"/>
+    <text x="392" y="150" font-size="9.5" fill="#61789B">9:41</text>
+
+    <!-- PHASE 1 — MultiCastDelegate -->
+    <g opacity="0">
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.22;0.25;1" values="1;1;0;0"/>
+      <g>
+        <animateTransform attributeName="transform" type="translate" dur="16s" repeatCount="indefinite"
+                          calcMode="spline" keyTimes="0;0.04;0.24;0.25;1"
+                          keySplines="0.34 0 0.2 1;0 0 1 1;0.4 0 0.2 1;0 0 1 1"
+                          values="0,12;0,0;0,0;0,12;0,12"/>
+        <text x="460" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#EAF1FB">MultiCastDelegate</text>
+        <!-- emitter -->
+        <circle cx="460" cy="224" r="13" fill="#12305C" stroke="#5B8CFF" stroke-width="2"/>
+        <text x="460" y="228" text-anchor="middle" font-size="8.5" fill="#9DBAF0">invoke</text>
+        <!-- fan-out wires -->
+        <g stroke="#274d89" stroke-width="1.6">
+          <line x1="452" y1="234" x2="418" y2="298"/>
+          <line x1="460" y1="237" x2="460" y2="298"/>
+          <line x1="468" y1="234" x2="502" y2="298"/>
+        </g>
+        <!-- subscribers (weak) -->
+        <g fill="#0f2a52" stroke="#5B8CFF" stroke-width="1.8">
+          <circle cx="418" cy="308" r="11"/>
+          <circle cx="460" cy="308" r="11"/>
+          <circle cx="502" cy="308" r="11"/>
+        </g>
+        <g font-size="8" fill="#7fa2e0" text-anchor="middle">
+          <text x="418" y="311">.main</text>
+          <text x="460" y="311">.q1</text>
+          <text x="502" y="311">.q2</text>
+        </g>
+        <!-- broadcast pulses -->
+        <g fill="#5B8CFF" filter="url(#spark)">
+          <circle r="3"><animateMotion path="M460 224 L418 308" dur="1.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="1.4s" repeatCount="indefinite"/></circle>
+          <circle r="3"><animateMotion path="M460 224 L460 308" dur="1.4s" begin="0.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="1.4s" begin="0.2s" repeatCount="indefinite"/></circle>
+          <circle r="3"><animateMotion path="M460 224 L502 308" dur="1.4s" begin="0.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="1.4s" begin="0.4s" repeatCount="indefinite"/></circle>
+        </g>
+        <text x="460" y="356" text-anchor="middle" font-size="10" fill="#8AA0C2">one-to-many · weak · per-queue</text>
+      </g>
+    </g>
+
+    <!-- PHASE 2 — DependencyResolver -->
+    <g opacity="0">
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.25;0.27;0.47;0.5;1" values="0;0;1;1;0;0"/>
+      <g>
+        <animateTransform attributeName="transform" type="translate" dur="16s" repeatCount="indefinite"
+                          calcMode="spline" keyTimes="0;0.27;0.31;0.47;0.5;1"
+                          keySplines="0 0 1 1;0.34 0 0.2 1;0 0 1 1;0.4 0 0.2 1;0 0 1 1"
+                          values="0,12;0,12;0,0;0,0;0,12;0,12"/>
+        <text x="460" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#EAF1FB">DependencyResolver</text>
+        <text x="460" y="206" text-anchor="middle" font-size="9" fill="#7fd8ab">Container.shared</text>
+        <!-- container with registered factories -->
+        <rect x="398" y="212" width="124" height="76" rx="10" fill="#0f2a52" stroke="#3ECF8E" stroke-width="1.6"/>
+        <g>
+          <rect x="408" y="220" width="104" height="18" rx="5" fill="#0c3a2a" stroke="#1f6f4d"/>
+          <text x="416" y="233" font-size="9.5" fill="#9fe3c2">AuthService</text>
+          <rect x="408" y="242" width="104" height="18" rx="5" fill="#0c3a2a" stroke="#3ECF8E" stroke-width="1.4"/>
+          <text x="416" y="255" font-size="9.5" fill="#c9f5e0">ProfileService</text>
+          <rect x="408" y="264" width="104" height="18" rx="5" fill="#0c3a2a" stroke="#1f6f4d"/>
+          <text x="416" y="277" font-size="9.5" fill="#9fe3c2">NetworkClient</text>
+        </g>
+        <!-- resolve arrow + moving instance -->
+        <line x1="460" y1="288" x2="460" y2="306" stroke="#274d89" stroke-width="1.6"/>
+        <path d="M456 302 L460 307 L464 302" fill="none" stroke="#3ECF8E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="410" y="310" width="100" height="20" rx="6" fill="#0c3a2a" stroke="#3ECF8E" stroke-width="1.6"/>
+        <text x="460" y="324" text-anchor="middle" font-size="10" fill="#c9f5e0">resolved() → Profile</text>
+        <circle r="3" fill="#3ECF8E" filter="url(#spark)">
+          <animateMotion path="M460 251 L460 310" dur="1.6s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <text x="460" y="356" text-anchor="middle" font-size="10" fill="#8AA0C2">façade over Factory · resolve</text>
+      </g>
+    </g>
+
+    <!-- PHASE 3 — Coordinator -->
+    <g opacity="0">
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.5;0.52;0.72;0.75;1" values="0;0;1;1;0;0"/>
+      <g>
+        <animateTransform attributeName="transform" type="translate" dur="16s" repeatCount="indefinite"
+                          calcMode="spline" keyTimes="0;0.52;0.56;0.72;0.75;1"
+                          keySplines="0 0 1 1;0.34 0 0.2 1;0 0 1 1;0.4 0 0.2 1;0 0 1 1"
+                          values="0,12;0,12;0,0;0,0;0,12;0,12"/>
+        <text x="460" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#EAF1FB">Coordinator</text>
+        <!-- role nodes -->
+        <g>
+          <rect x="394" y="208" width="60" height="30" rx="8" fill="#0f2a52" stroke="#A78BFA" stroke-width="1.6"/>
+          <text x="424" y="227" text-anchor="middle" font-size="10.5" fill="#d9ccff">View</text>
+          <rect x="466" y="208" width="62" height="30" rx="8" fill="#1a1140" stroke="#A78BFA" stroke-width="1.8"/>
+          <text x="497" y="227" text-anchor="middle" font-size="10.5" fill="#e6dcff">Coord.</text>
+          <rect x="418" y="290" width="84" height="30" rx="8" fill="#0f2a52" stroke="#A78BFA" stroke-width="1.6"/>
+          <text x="460" y="309" text-anchor="middle" font-size="10.5" fill="#d9ccff">ViewDelegate</text>
+        </g>
+        <!-- arrows -->
+        <g stroke="#7c6bbf" stroke-width="1.6" fill="none">
+          <line x1="454" y1="220" x2="464" y2="220"/>
+          <path d="M459 217 L465 220 L459 223" fill="#7c6bbf" stroke="none"/>
+          <line x1="490" y1="238" x2="470" y2="288"/>
+          <path d="M467 281 L470 289 L474 283" fill="#7c6bbf" stroke="none"/>
+        </g>
+        <text x="440" y="216" text-anchor="middle" font-size="7.5" fill="#8f7fc9">input</text>
+        <text x="500" y="270" text-anchor="middle" font-size="7.5" fill="#8f7fc9">navigate</text>
+        <!-- pulse around the flow -->
+        <circle r="3" fill="#A78BFA" filter="url(#spark)">
+          <animateMotion path="M424 223 L497 223 L460 305" dur="2.4s" repeatCount="indefinite" calcMode="spline" keyPoints="0;0.4;1" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          <animate attributeName="opacity" values="0;1;1;1;0" dur="2.4s" repeatCount="indefinite"/>
+        </circle>
+        <text x="460" y="356" text-anchor="middle" font-size="10" fill="#8AA0C2">SwiftUI · UIKit · AppKit</text>
+      </g>
+    </g>
+
+    <!-- PHASE 4 — SwiftConcurrency -->
+    <g opacity="0">
+      <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.75;0.77;0.99;1" values="0;0;1;1;0"/>
+      <g>
+        <animateTransform attributeName="transform" type="translate" dur="16s" repeatCount="indefinite"
+                          calcMode="spline" keyTimes="0;0.77;0.81;0.99;1"
+                          keySplines="0 0 1 1;0.34 0 0.2 1;0 0 1 1;0 0 1 1"
+                          values="0,12;0,12;0,0;0,0;0,12"/>
+        <text x="460" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#EAF1FB">SwiftConcurrency</text>
+        <!-- padlock over state -->
+        <path d="M446 220 L446 212 A14 14 0 0 1 474 212 L474 220" fill="none" stroke="#F0B429" stroke-width="3"/>
+        <rect x="434" y="220" width="52" height="42" rx="8" fill="#F0B429"/>
+        <circle cx="460" cy="238" r="4.5" fill="#5a4410"/>
+        <rect x="457.5" y="238" width="5" height="12" rx="2.5" fill="#5a4410"/>
+        <!-- protected state -->
+        <rect x="416" y="272" width="88" height="26" rx="7" fill="#2a2410" stroke="#7a5b1a" stroke-width="1.4"/>
+        <text x="460" y="289" text-anchor="middle" font-size="10.5" fill="#f3d488">withLock { state }</text>
+        <!-- backend selection cycles -->
+        <text x="460" y="320" text-anchor="middle" font-size="10.5" font-weight="600" fill="#5B8CFF">Mutex
+          <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.77;0.78;0.84;0.85;1" values="0;0;1;1;0;0"/>
+        </text>
+        <text x="460" y="320" text-anchor="middle" font-size="9.5" font-weight="600" fill="#3ECF8E" opacity="0">OSAllocatedUnfairLock
+          <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.84;0.85;0.91;0.92;1" values="0;0;1;1;0;0"/>
+        </text>
+        <text x="460" y="320" text-anchor="middle" font-size="10.5" font-weight="600" fill="#A78BFA" opacity="0">NSLock
+          <animate attributeName="opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.91;0.92;0.99;1" values="0;0;1;1;0"/>
+        </text>
+        <text x="460" y="356" text-anchor="middle" font-size="10" fill="#8AA0C2">OS-adaptive lock-box</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== feature legend (right) ===== -->
+  <g>
+    <g transform="translate(600,160)">
+      <circle r="5" fill="#5B8CFF"><animate attributeName="r" dur="16s" repeatCount="indefinite" keyTimes="0;0.22;0.25;1" values="7;7;5;5"/><animate attributeName="fill-opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.22;0.25;1" values="1;1;0.35;0.35"/></circle>
+      <text x="20" y="5" font-size="15.5" font-weight="600" fill="#EAF1FB">MultiCastDelegate</text>
+      <text x="20" y="24" font-size="11.5" fill="#8AA0C2">type-safe one-to-many delegates</text>
+    </g>
+    <g transform="translate(600,216)">
+      <circle r="5" fill="#3ECF8E"><animate attributeName="r" dur="16s" repeatCount="indefinite" keyTimes="0;0.25;0.27;0.47;0.5;1" values="5;5;7;7;5;5"/><animate attributeName="fill-opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.25;0.27;0.47;0.5;1" values="0.35;0.35;1;1;0.35;0.35"/></circle>
+      <text x="20" y="5" font-size="15.5" font-weight="600" fill="#EAF1FB">DependencyResolver</text>
+      <text x="20" y="24" font-size="11.5" fill="#8AA0C2">thin protocol façade over Factory</text>
+    </g>
+    <g transform="translate(600,272)">
+      <circle r="5" fill="#A78BFA"><animate attributeName="r" dur="16s" repeatCount="indefinite" keyTimes="0;0.5;0.52;0.72;0.75;1" values="5;5;7;7;5;5"/><animate attributeName="fill-opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.5;0.52;0.72;0.75;1" values="0.35;0.35;1;1;0.35;0.35"/></circle>
+      <text x="20" y="5" font-size="15.5" font-weight="600" fill="#EAF1FB">Coordinator</text>
+      <text x="20" y="24" font-size="11.5" fill="#8AA0C2">SwiftUI · UIKit · AppKit architecture</text>
+    </g>
+    <g transform="translate(600,328)">
+      <circle r="5" fill="#F0B429"><animate attributeName="r" dur="16s" repeatCount="indefinite" keyTimes="0;0.75;0.77;0.99;1" values="5;5;7;7;5"/><animate attributeName="fill-opacity" dur="16s" repeatCount="indefinite" keyTimes="0;0.75;0.77;0.99;1" values="0.35;0.35;1;1;0.35"/></circle>
+      <text x="20" y="5" font-size="15.5" font-weight="600" fill="#EAF1FB">SwiftConcurrency</text>
+      <text x="20" y="24" font-size="11.5" fill="#8AA0C2">OS-adaptive lock-box · Mutex → NSLock</text>
+    </g>
+  </g>
+
+  <!-- ===== ships-as ===== -->
+  <g font-size="11" text-anchor="middle">
+    <g transform="translate(600,396)"><rect width="256" height="22" rx="11" fill="#102647" stroke="#284d84"/><text x="128" y="15" fill="#B9C8DF">4 products · import only what you need</text></g>
+  </g>
+
+  <!-- ===== thread-safety pill ===== -->
+  <g transform="translate(44,318)">
+    <rect width="172" height="22" rx="11" fill="#102647" stroke="#284d84"/>
+    <circle cx="16" cy="11" r="4" fill="#3ECF8E"/>
+    <text x="30" y="15" font-size="10.5" fill="#B9C8DF">Sendable · thread-safe</text>
+  </g>
+
+  <!-- ===== progress ===== -->
+  <rect x="44" y="446" width="812" height="4" rx="2" fill="#12294c"/>
+  <rect x="44" y="446" width="812" height="4" rx="2" fill="url(#brand)">
+    <animate attributeName="width" dur="16s" repeatCount="indefinite" values="0;812"/>
+  </rect>
+</svg>

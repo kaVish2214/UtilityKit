@@ -5,6 +5,11 @@
 [![Swift Package Manager](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS%2014%2B%20%7C%20iPadOS%2014%2B%20%7C%20Mac%20Catalyst%2014%2B%20%7C%20macOS%2010.15%2B-blue.svg)](https://developer.apple.com)
 
+<p align="center">
+  <img src="Documentation/Media/utility-kit.svg" width="820"
+       alt="UtilityKit at a glance: four small, focused libraries you import à la carte — MultiCastDelegate (a type-safe, thread-safe one-to-many delegate pattern with per-subscriber queues), DependencyResolver (a thin protocol façade over Factory for register/resolve), Coordinator (a coordinator-driven architecture routing user input to a coordinator and navigation to a view delegate across SwiftUI, UIKit and AppKit), and SwiftConcurrency (an OS-adaptive lock-box that picks Mutex, OSAllocatedUnfairLock or NSLock behind one protocol).">
+</p>
+
 A Swift Package that bundles four small, focused libraries used across iOS, iPadOS, Mac Catalyst, and macOS apps:
 
 | Product              | What it gives you                                                                                  |
